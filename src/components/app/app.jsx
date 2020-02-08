@@ -16,8 +16,8 @@ const App = (props) => {
   );
 };
 
-export default App;
-
 App.propTypes = {
   errorsCount: PropTypes.number.isRequired,
 };
+
+export default App;
