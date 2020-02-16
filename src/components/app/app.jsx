@@ -31,34 +31,18 @@ class App extends PureComponent {
       );
     }
 
-    if (question) {
-      switch (question.type) {
-        case GameType.ARTIST:
-          return (
-            <ArtistQuestion
-              question={question}
-              onAnswer={() => {
-                this.setState((prevState) => ({
-                  step: prevState.step + 1,
-                }));
-              }}
-            />
-          );
-        case GameType.GENRE:
-          return (
-            <GenreQuestion
-              question={question}
-              onAnswer={() => {
-                this.setState((prevState) => ({
-                  step: prevState.step + 1,
-                }));
-              }}
-            />
-          );
-      }
-    }
+    const GameScreen= question.type === GameType.ARTIST ? ArtistQuestion : GenreQuestion;
 
-    return null;
+    return (
+      <GameScreen
+        question={question}
+        onAnswer={() => {
+          this.setState((prevState) => ({
+            step: prevState.step + 1,
+          }));
+        }}
+      />
+    );
 
   }
 
