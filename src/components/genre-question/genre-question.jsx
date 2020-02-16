@@ -7,7 +7,7 @@ class GenreQuestion extends PureComponent {
     super(props);
 
     this.state = {
-      answers: [false, false, false, false],
+      answers: props.question.answers.map(() => false),
     };
   }
 

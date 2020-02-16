@@ -31,7 +31,7 @@ class App extends PureComponent {
       );
     }
 
-    const GameScreen= question.type === GameType.ARTIST ? ArtistQuestion : GenreQuestion;
+    const GameScreen = question.type === GameType.ARTIST ? ArtistQuestion : GenreQuestion;
 
     return (
       <GameScreen
