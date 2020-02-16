@@ -57,9 +57,12 @@ it(`User answer passed to callback is consistent with "userAnswer" prop`, () => 
 
   const form = genreQuestion.find(`form`);
   const inputTwo = genreQuestion.find(`input`).at(1);
+  const mockPreventFunction = jest.fn();
 
   inputTwo.simulate(`change`, {target: {checked: true}});
-  form.simulate(`submit`, {preventDefault() {}});
+  form.simulate(`submit`, {preventDefault: mockPreventFunction});
+
+  expect(mockPreventFunction).toBeCalled();
 
   expect(onAnswer).toHaveBeenCalledTimes(1);
 

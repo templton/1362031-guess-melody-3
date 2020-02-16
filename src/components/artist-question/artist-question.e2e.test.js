@@ -27,11 +27,6 @@ const mock = {
 };
 
 
-const mockEvent = {
-  preventDefault() {}
-};
-
-
 it(`Click on user answer should pass to the callback data-object from which this answer was created`, () => {
   const {question} = mock;
   const onAnswer = jest.fn();
@@ -48,7 +43,11 @@ it(`Click on user answer should pass to the callback data-object from which this
   const answerInputs = screen.find(`input`);
   const answerOne = answerInputs.at(0);
 
-  answerOne.simulate(`change`, mockEvent);
+  const mockPrevEvent = jest.fn();
+
+  answerOne.simulate(`change`, {preventDefault: mockPrevEvent});
+
+  expect(mockPrevEvent).toBeCalled();
 
   expect(onAnswer).toHaveBeenCalledTimes(1);
 
