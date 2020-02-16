@@ -71,7 +71,7 @@ class App extends PureComponent {
             {this._renderGameScreen()}
           </Route>
           <Route exact path="/dev-artist">
-            <ArtistQuestion/>
+            <ArtistQuestion onAnswer={()=>{}} question={questions[1]}/>
           </Route>
           <Route axact path="/dev-genre">
             <GenreQuestion onAnswer={()=>{}} question={questions[0]}/>
