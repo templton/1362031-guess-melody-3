@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {GameType} from "../../const.js";
 
 const ArtistQuestion = (props) => {
   const {onAnswer, question} = props;
@@ -69,8 +68,7 @@ ArtistQuestion.propTypes = {
     song: PropTypes.shape({
       artist: PropTypes.string.isRequired,
       src: PropTypes.string.isRequired,
-    }).isRequired,
-    type: PropTypes.oneOf([GameType.ARTIST, GameType.GENRE]).isRequired,
+    }).isRequired
   }).isRequired,
 };
 
