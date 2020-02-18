@@ -30,12 +30,13 @@ const mock = {
 it(`When user answers genre question form is not sent`, () => {
   const {question} = mock;
   const onAnswer = jest.fn();
-  const genreQuestion = shallow(<GenreQuestion
+  const genre = shallow(<GenreQuestion
     onAnswer={onAnswer}
     question={question}
+    renderPlayer={() => {}}
   />);
 
-  const form = genreQuestion.find(`form`);
+  const form = genre.find(`form`);
   const formSendPrevention = jest.fn();
   form.simulate(`submit`, {
     preventDefault: formSendPrevention,
@@ -50,13 +51,14 @@ it(`User answer passed to callback is consistent with "userAnswer" prop`, () => 
   const onAnswer = jest.fn((...args) => [...args]);
   const userAnswer = [false, true, false, false];
 
-  const genreQuestion = shallow(<GenreQuestion
+  const genre = shallow(<GenreQuestion
     onAnswer={onAnswer}
     question={question}
+    renderPlayer={() => {}}
   />);
 
-  const form = genreQuestion.find(`form`);
-  const inputTwo = genreQuestion.find(`input`).at(1);
+  const form = genre.find(`form`);
+  const inputTwo = genre.find(`input`).at(1);
   const mockPreventFunction = jest.fn();
 
   inputTwo.simulate(`change`, {target: {checked: true}});
@@ -69,6 +71,6 @@ it(`User answer passed to callback is consistent with "userAnswer" prop`, () => 
   expect(onAnswer).toBeCalledWith(question, userAnswer);
 
   expect(
-      genreQuestion.find(`input`).map((it) => it.prop(`checked`))
+    genre.find(`input`).map((it) => it.prop(`checked`))
   ).toEqual(userAnswer);
 });
