@@ -6,6 +6,10 @@ import GameScreen from "../game-screen/game-screen.jsx";
 import ArtistQuestion from "../artist-question/artist-question.jsx";
 import GenreQuestion from "../genre-question/genre-question.jsx";
 import {GameType} from "../../const";
+import withAudioPlayer from "../../hocs/with-audio-player/with-audio-player.js";
+
+const GenreQuestionWrapped = withAudioPlayer(GenreQuestion);
+const ArtistQuestionWrapped = withAudioPlayer(ArtistQuestion);
 
 class App extends PureComponent {
 
@@ -32,7 +36,7 @@ class App extends PureComponent {
       );
     }
 
-    const PageGame = question.type === GameType.ARTIST ? ArtistQuestion : GenreQuestion;
+    const PageGame = question.type === GameType.ARTIST ? ArtistQuestionWrapped : GenreQuestionWrapped;
 
     return (
       <GameScreen type={question.type}>
@@ -58,10 +62,10 @@ class App extends PureComponent {
             {this._renderGameScreen()}
           </Route>
           <Route exact path="/dev-artist">
-            <ArtistQuestion onAnswer={()=>{}} question={questions[1]}/>
+            <ArtistQuestionWrapped onAnswer={()=>{}} question={questions[1]}/>
           </Route>
           <Route axact path="/dev-genre">
-            <GenreQuestion onAnswer={()=>{}} question={questions[0]}/>
+            <GenreQuestionWrapped onAnswer={()=>{}} question={questions[0]}/>
           </Route>
         </Switch>
       </BrowserRouter>
