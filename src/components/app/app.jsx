@@ -2,6 +2,7 @@ import React, {PureComponent} from "react";
 import PropTypes from "prop-types";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import WelcomeScreen from "../welcome-screen/welcome-screen.jsx";
+import GameScreen from "../game-screen/game-screen.jsx";
 import ArtistQuestion from "../artist-question/artist-question.jsx";
 import GenreQuestion from "../genre-question/genre-question.jsx";
 import {GameType} from "../../const";
