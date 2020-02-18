@@ -32,17 +32,19 @@ class App extends PureComponent {
       );
     }
 
-    const GameScreen = question.type === GameType.ARTIST ? ArtistQuestion : GenreQuestion;
+    const PageGame = question.type === GameType.ARTIST ? ArtistQuestion : GenreQuestion;
 
     return (
-      <GameScreen
-        question={question}
-        onAnswer={() => {
-          this.setState((prevState) => ({
-            step: prevState.step + 1,
-          }));
-        }}
-      />
+      <GameScreen type={question.type}>
+        <PageGame
+          question={question}
+          onAnswer={() => {
+            this.setState((prevState) => ({
+              step: prevState.step + 1,
+            }));
+          }}
+        />
+      </GameScreen>
     );
 
   }
