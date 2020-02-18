@@ -70,7 +70,5 @@ it(`User answer passed to callback is consistent with "userAnswer" prop`, () => 
 
   expect(onAnswer).toBeCalledWith(question, userAnswer);
 
-  expect(
-    genre.find(`input`).map((it) => it.prop(`checked`))
-  ).toEqual(userAnswer);
+  expect(genre.find(`input`).map((it) => it.prop(`checked`))).toEqual(userAnswer);
 });
