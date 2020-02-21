@@ -8,12 +8,20 @@ const withActivePlayer = (Component) => {
 
       this.state = {
         activePlayerId: 0,
+        isPlaying: true
       };
+
+      this.setPlayingStatus = this.setPlayingStatus.bind(this);
+    }
+
+    setPlayingStatus(value) {
+      this.setState({
+        isPlaying: value
+      });
     }
 
     render() {
       const {activePlayerId} = this.state;
-
       return <Component
         {...this.props}
         renderPlayer={(src, id) => {
@@ -21,6 +29,7 @@ const withActivePlayer = (Component) => {
             <AudioPlayer
               src={src}
               isPlaying={id === activePlayerId}
+              setPlayingStatus={this.setPlayingStatus}
               onPlayButtonClick={() => this.setState({
                 activePlayerId: activePlayerId === id ? -1 : id
               })}
