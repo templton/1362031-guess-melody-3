@@ -7,11 +7,6 @@ export default class AudioPlayer extends PureComponent {
     super(props);
 
     this._audioRef = createRef();
-
-    this.state = {
-      progress: 0,
-      isLoading: true,
-    };
   }
 
   componentDidMount() {
@@ -21,21 +16,13 @@ export default class AudioPlayer extends PureComponent {
 
     audio.src = src;
 
-    audio.oncanplaythrough = () => this.setState({
-      isLoading: false
-    });
+    audio.oncanplaythrough = () => this.props.setLoadingStatus(false);
 
-    audio.onplay = () => {
-      this.props.setPlayingStatus(true);
-    };
+    audio.onplay = () => this.props.setPlayingStatus(true);
 
-    audio.onpause = () => {
-      this.props.setPlayingStatus(false);
-    }
+    audio.onpause = () => this.props.setPlayingStatus(false);
 
-    audio.ontimeupdate = () => this.setState({
-      progress: audio.currentTime
-    });
+    audio.ontimeupdate = () => this.props.setProgress(audio.currentTime);
   }
 
   componentWillUnmount() {
@@ -48,8 +35,7 @@ export default class AudioPlayer extends PureComponent {
   }
 
   render() {
-    const {isLoading} = this.state;
-    const {onPlayButtonClick, isPlaying, setPlayingStatus} = this.props;
+    const {onPlayButtonClick, isPlaying, setPlayingStatus, isLoading} = this.props;
 
     return (
       <Fragment>
@@ -82,7 +68,11 @@ export default class AudioPlayer extends PureComponent {
 
 AudioPlayer.propTypes = {
   isPlaying: PropTypes.bool.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  progress: PropTypes.number.isRequired,
   src: PropTypes.string.isRequired,
   onPlayButtonClick: PropTypes.func.isRequired,
   setPlayingStatus: PropTypes.func.isRequired,
+  setLoadingStatus: PropTypes.func.isRequired,
+  setProgress: PropTypes.func.isRequired,
 };

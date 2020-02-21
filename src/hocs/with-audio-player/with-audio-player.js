@@ -8,10 +8,14 @@ const withActivePlayer = (Component) => {
 
       this.state = {
         activePlayerId: 0,
-        isPlaying: true
+        isPlaying: true,
+        isLoading: true,
+        progress: 0
       };
 
       this.setPlayingStatus = this.setPlayingStatus.bind(this);
+      this.setLoadingStatus = this.setLoadingStatus.bind(this);
+      this.setProgress = this.setProgress.bind(this);
     }
 
     setPlayingStatus(value) {
@@ -20,8 +24,20 @@ const withActivePlayer = (Component) => {
       });
     }
 
+    setLoadingStatus(value) {
+      this.setState({
+        isLoading: value
+      });
+    }
+
+    setProgress(value) {
+      this.setState({
+        progress: value
+      });
+    }
+
     render() {
-      const {activePlayerId} = this.state;
+      const {activePlayerId, isLoading, progress} = this.state;
       return <Component
         {...this.props}
         renderPlayer={(src, id) => {
@@ -29,7 +45,11 @@ const withActivePlayer = (Component) => {
             <AudioPlayer
               src={src}
               isPlaying={id === activePlayerId}
+              isLoading={isLoading}
+              progress={progress}
               setPlayingStatus={this.setPlayingStatus}
+              setLoadingStatus={this.setLoadingStatus}
+              setProgress={this.setProgress}
               onPlayButtonClick={() => this.setState({
                 activePlayerId: activePlayerId === id ? -1 : id
               })}
