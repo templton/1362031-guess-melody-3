@@ -1,6 +1,10 @@
 import React from "react";
 import renderer from "react-test-renderer";
+import {Provider} from "react-redux";
+import configureStore from "redux-mock-store";
 import {App} from "./app.jsx";
+
+const mockStore = configureStore([]);
 
 
 const questions = [
@@ -40,14 +44,22 @@ const questions = [
 ];
 
 it(`Render App`, () => {
+  const store = mockStore({
+    mistakes: 0
+  });
+
   const tree = renderer
-    .create(<App
-      errorsCount={3}
-      questions={questions}
-      onWelcomeButtonClick={()=>{}}
-      onUserAnswer={()=>{}}
-      step={-1}
-    />).toJSON();
+    .create(
+        <Provider store={store}>
+          <App
+            errorsCount={3}
+            questions={questions}
+            onWelcomeButtonClick={()=>{}}
+            onUserAnswer={()=>{}}
+            step={-1}
+          />
+        </Provider>
+    ).toJSON();
 
   expect(tree).toMatchSnapshot();
 });
