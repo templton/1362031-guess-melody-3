@@ -21,7 +21,7 @@ class App extends PureComponent {
 
   _renderGameScreen() {
     const {
-      errorsCount,
+      maxMistakes,
       questions,
       step,
       onUserAnswer,
@@ -32,9 +32,11 @@ class App extends PureComponent {
 
     if (step === -1 || step >= questions.length) {
       return (
-        <WelcomeScreen onWelcomeButtonClick={onWelcomeButtonClick} errorsCount={errorsCount}/>
+        <WelcomeScreen onWelcomeButtonClick={onWelcomeButtonClick} errorsCount={maxMistakes}/>
       );
     }
+
+    // console.log('question, step='+step,question);
 
     const PageGame = question.type === GameType.ARTIST ? ArtistQuestionWrapped : GenreQuestionWrapped;
 
@@ -70,7 +72,7 @@ class App extends PureComponent {
 }
 
 App.propTypes = {
-  errorsCount: PropTypes.number.isRequired,
+  maxMistakes: PropTypes.number.isRequired,
   step: PropTypes.number.isRequired,
   questions: PropTypes.array.isRequired,
   onWelcomeButtonClick: PropTypes.func.isRequired,
@@ -78,7 +80,9 @@ App.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  step: state.step
+  step: state.step,
+  maxMistakes: state.maxMistakes,
+  questions: state.questions,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -86,8 +90,8 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(ActionCreator.incrementStep());
   },
   onUserAnswer(question, answer) {
-    dispatch(ActionCreator.incrementStep());
     dispatch(ActionCreator.incrementMistake(question, answer));
+    dispatch(ActionCreator.incrementStep());
   }
 });
 

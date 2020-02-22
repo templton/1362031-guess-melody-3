@@ -1,7 +1,10 @@
 import {GameType} from "./const";
+import questions from "./mocks/questions";
 
 const initialState = {
   mistakes: 0,
+  maxMistakes: 3,
+  questions,
   step: -1
 };
 
@@ -22,7 +25,8 @@ const isGenreAnswerCorrect = (question, userAnswer) => {
 
 const ActionCreator = {
   incrementStep: () => ({
-    type: ActionType.INCREMENT_STEP
+    type: ActionType.INCREMENT_STEP,
+    payload: 1
   }),
   incrementMistake: (question, userAnswer) => {
     let answerIsCorrect = false;
@@ -46,9 +50,22 @@ const ActionCreator = {
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case ActionType.INCREMENT_STEP:
-      return Object.assign({}, state, {step: state.step + 1});
+      let nextStep = state.step + action.payload;
+
+      if (nextStep >= state.questions.length) {
+        return Object.assign({}, initialState);
+      }
+
+      return Object.assign({}, state, {step: nextStep});
+
     case ActionType.INCREMENT_MISTAKES:
-      return Object.assign({}, state, {mistakes: state.mistakes + action.payload});
+      const mistakes = state.mistakes + action.payload;
+
+      if (mistakes >= state.maxMistakes) {
+        return Object.assign({}, initialState);
+      }
+
+      return Object.assign({}, state, {mistakes});
   }
 
   return state;
