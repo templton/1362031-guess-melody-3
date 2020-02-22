@@ -11,6 +11,7 @@ export default class AudioPlayer extends PureComponent {
     this.handleCanPlayThrough = this.handleCanPlayThrough.bind(this);
     this.handleTimeUpdate = this.handleTimeUpdate.bind(this);
     this.handlePause = this.handlePause.bind(this);
+    this.handleButtonPlayClick = this.handleButtonPlayClick.bind(this);
   }
 
   handlePlay() {
@@ -33,8 +34,14 @@ export default class AudioPlayer extends PureComponent {
     onSetProgress(this._audioRef.current.currentTime);
   }
 
+  handleButtonPlayClick() {
+    const {onSetPlayingStatus, onPlayButtonClick, isPlaying} = this.props;
+    onSetPlayingStatus(!isPlaying);
+    onPlayButtonClick();
+  }
+
   render() {
-    const {onPlayButtonClick, isPlaying, onSetPlayingStatus, isLoading, src} = this.props;
+    const {isPlaying, isLoading, src} = this.props;
 
     return (
       <Fragment>
@@ -42,10 +49,7 @@ export default class AudioPlayer extends PureComponent {
           className={`track__button track__button--${isPlaying ? `pause` : `play`}`}
           type="button"
           disabled={isLoading}
-          onClick={() => {
-            onSetPlayingStatus(!isPlaying);
-            onPlayButtonClick();
-          }}
+          onClick={this.handleButtonPlayClick}
         />
         <div className="track__status">
           <audio
