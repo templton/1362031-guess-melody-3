@@ -21,10 +21,17 @@ const question = {
   }],
 };
 
-it(`ArtistQuestionScreen is rendered correctly`, () => {
-  const tree = renderer.create(
-      <ArtistQuestion question={question} onAnswer={() => {}}/>
-  ).toJSON();
+describe(`ArtistQuestion render`, () => {
+  it(`ArtistQuestionScreen is rendered correctly`, () => {
+    const tree = renderer.create(
+        <ArtistQuestion question={question} onAnswer={() => {}} renderPlayer={() => {}}/>, {
+          createNodeMock: () => {
+            return {};
+          }
+        }
+    ).toJSON();
 
-  expect(tree).toMatchSnapshot();
+    expect(tree).toMatchSnapshot();
+  });
 });
+

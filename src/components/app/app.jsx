@@ -2,9 +2,14 @@ import React, {PureComponent} from "react";
 import PropTypes from "prop-types";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import WelcomeScreen from "../welcome-screen/welcome-screen.jsx";
+import GameScreen from "../game-screen/game-screen.jsx";
 import ArtistQuestion from "../artist-question/artist-question.jsx";
 import GenreQuestion from "../genre-question/genre-question.jsx";
 import {GameType} from "../../const";
+import withAudioPlayer from "../../hocs/with-audio-player/with-audio-player.js";
+
+const GenreQuestionWrapped = withAudioPlayer(GenreQuestion);
+const ArtistQuestionWrapped = withAudioPlayer(ArtistQuestion);
 
 class App extends PureComponent {
 
@@ -31,17 +36,19 @@ class App extends PureComponent {
       );
     }
 
-    const GameScreen = question.type === GameType.ARTIST ? ArtistQuestion : GenreQuestion;
+    const PageGame = question.type === GameType.ARTIST ? ArtistQuestionWrapped : GenreQuestionWrapped;
 
     return (
-      <GameScreen
-        question={question}
-        onAnswer={() => {
-          this.setState((prevState) => ({
-            step: prevState.step + 1,
-          }));
-        }}
-      />
+      <GameScreen type={question.type}>
+        <PageGame
+          question={question}
+          onAnswer={() => {
+            this.setState((prevState) => ({
+              step: prevState.step + 1,
+            }));
+          }}
+        />
+      </GameScreen>
     );
 
   }
@@ -55,10 +62,10 @@ class App extends PureComponent {
             {this._renderGameScreen()}
           </Route>
           <Route exact path="/dev-artist">
-            <ArtistQuestion onAnswer={()=>{}} question={questions[1]}/>
+            <ArtistQuestionWrapped onAnswer={()=>{}} question={questions[1]}/>
           </Route>
           <Route axact path="/dev-genre">
-            <GenreQuestion onAnswer={()=>{}} question={questions[0]}/>
+            <GenreQuestionWrapped onAnswer={()=>{}} question={questions[0]}/>
           </Route>
         </Switch>
       </BrowserRouter>
