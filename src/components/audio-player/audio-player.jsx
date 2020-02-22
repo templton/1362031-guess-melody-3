@@ -7,35 +7,41 @@ export default class AudioPlayer extends PureComponent {
     super(props);
 
     this._audioRef = createRef();
+    this.handlePlay = this.handlePlay.bind(this);
+    this.handleCanPlayThrough = this.handleCanPlayThrough.bind(this);
+    this.handleTimeUpdate = this.handleTimeUpdate.bind(this);
+    this.handlePause = this.handlePause.bind(this);
+    this.handleButtonPlayClick = this.handleButtonPlayClick.bind(this);
   }
 
-  componentDidMount() {
-    const {src} = this.props;
-
-    const audio = this._audioRef.current;
-
-    audio.src = src;
-
-    audio.oncanplaythrough = () => this.props.onSetLoadingStatus(false);
-
-    audio.onplay = () => this.props.onSetPlayingStatus(true);
-
-    audio.onpause = () => this.props.onSetPlayingStatus(false);
-
-    audio.ontimeupdate = () => this.props.onSetProgress(audio.currentTime);
+  handlePlay() {
+    const {onSetPlayingStatus} = this.props;
+    onSetPlayingStatus(true);
   }
 
-  componentWillUnmount() {
-    const audio = this._audioRef.current;
-    audio.oncanplaythrough = null;
-    audio.onplay = null;
-    audio.onpause = null;
-    audio.ontimeupdate = null;
-    audio.src = ``;
+  handleCanPlayThrough() {
+    const {onSetLoadingStatus} = this.props;
+    onSetLoadingStatus(false);
+  }
+
+  handlePause() {
+    const {onSetPlayingStatus} = this.props;
+    onSetPlayingStatus(false);
+  }
+
+  handleTimeUpdate() {
+    const {onSetProgress} = this.props;
+    onSetProgress(this._audioRef.current.currentTime);
+  }
+
+  handleButtonPlayClick() {
+    const {onSetPlayingStatus, onPlayButtonClick, isPlaying} = this.props;
+    onSetPlayingStatus(!isPlaying);
+    onPlayButtonClick();
   }
 
   render() {
-    const {onPlayButtonClick, isPlaying, onSetPlayingStatus, isLoading} = this.props;
+    const {isPlaying, isLoading, src} = this.props;
 
     return (
       <Fragment>
@@ -43,13 +49,17 @@ export default class AudioPlayer extends PureComponent {
           className={`track__button track__button--${isPlaying ? `pause` : `play`}`}
           type="button"
           disabled={isLoading}
-          onClick={() => {
-            onSetPlayingStatus(!isPlaying);
-            onPlayButtonClick();
-          }}
+          onClick={this.handleButtonPlayClick}
         />
         <div className="track__status">
-          <audio ref={this._audioRef} />
+          <audio
+            ref={this._audioRef}
+            src={src}
+            onPlay={this.handlePlay}
+            onCanPlayThrough={this.handleCanPlayThrough}
+            onPause={this.handlePause}
+            onTimeUpdate={this.handleTimeUpdate}
+          />
         </div>
       </Fragment>
     );
