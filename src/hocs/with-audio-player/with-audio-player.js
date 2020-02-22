@@ -13,24 +13,24 @@ const withActivePlayer = (Component) => {
         progress: 0
       };
 
-      this.setPlayingStatus = this.setPlayingStatus.bind(this);
-      this.setLoadingStatus = this.setLoadingStatus.bind(this);
-      this.setProgress = this.setProgress.bind(this);
+      this.handleSetPlayingStatus = this.handleSetPlayingStatus.bind(this);
+      this.handleSetLoadingStatus = this.handleSetLoadingStatus.bind(this);
+      this.handleSetProgress = this.handleSetProgress.bind(this);
     }
 
-    setPlayingStatus(value) {
+    handleSetPlayingStatus(value) {
       this.setState({
         isPlaying: value
       });
     }
 
-    setLoadingStatus(value) {
+    handleSetLoadingStatus(value) {
       this.setState({
         isLoading: value
       });
     }
 
-    setProgress(value) {
+    handleSetProgress(value) {
       this.setState({
         progress: value
       });
@@ -47,9 +47,9 @@ const withActivePlayer = (Component) => {
               isPlaying={id === activePlayerId}
               isLoading={isLoading}
               progress={progress}
-              setPlayingStatus={this.setPlayingStatus}
-              setLoadingStatus={this.setLoadingStatus}
-              setProgress={this.setProgress}
+              onSetPlayingStatus={this.handleSetPlayingStatus}
+              onSetLoadingStatus={this.handleSetLoadingStatus}
+              onSetProgress={this.handleSetProgress}
               onPlayButtonClick={() => this.setState({
                 activePlayerId: activePlayerId === id ? -1 : id
               })}

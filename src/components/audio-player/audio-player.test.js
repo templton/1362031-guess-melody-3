@@ -19,9 +19,9 @@ describe(`Render audio player`, () => {
       onPlayButtonClick={() => {}}
       isLoading={false}
       progress={0}
-      setPlayingStatus={() => {}}
-      setLoadingStatus={() => {}}
-      setProgress={() => {}}
+      onSetPlayingStatus={() => {}}
+      onSetLoadingStatus={() => {}}
+      onSetProgress={() => {}}
     />, {
       createNodeMock: () => {
         return {};

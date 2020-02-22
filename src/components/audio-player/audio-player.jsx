@@ -16,13 +16,13 @@ export default class AudioPlayer extends PureComponent {
 
     audio.src = src;
 
-    audio.oncanplaythrough = () => this.props.setLoadingStatus(false);
+    audio.oncanplaythrough = () => this.props.onSetLoadingStatus(false);
 
-    audio.onplay = () => this.props.setPlayingStatus(true);
+    audio.onplay = () => this.props.onSetPlayingStatus(true);
 
-    audio.onpause = () => this.props.setPlayingStatus(false);
+    audio.onpause = () => this.props.onSetPlayingStatus(false);
 
-    audio.ontimeupdate = () => this.props.setProgress(audio.currentTime);
+    audio.ontimeupdate = () => this.props.onSetProgress(audio.currentTime);
   }
 
   componentWillUnmount() {
@@ -35,7 +35,7 @@ export default class AudioPlayer extends PureComponent {
   }
 
   render() {
-    const {onPlayButtonClick, isPlaying, setPlayingStatus, isLoading} = this.props;
+    const {onPlayButtonClick, isPlaying, onSetPlayingStatus, isLoading} = this.props;
 
     return (
       <Fragment>
@@ -44,7 +44,7 @@ export default class AudioPlayer extends PureComponent {
           type="button"
           disabled={isLoading}
           onClick={() => {
-            setPlayingStatus(!isPlaying);
+            onSetPlayingStatus(!isPlaying);
             onPlayButtonClick();
           }}
         />
@@ -72,7 +72,7 @@ AudioPlayer.propTypes = {
   progress: PropTypes.number.isRequired,
   src: PropTypes.string.isRequired,
   onPlayButtonClick: PropTypes.func.isRequired,
-  setPlayingStatus: PropTypes.func.isRequired,
-  setLoadingStatus: PropTypes.func.isRequired,
-  setProgress: PropTypes.func.isRequired,
+  onSetPlayingStatus: PropTypes.func.isRequired,
+  onSetLoadingStatus: PropTypes.func.isRequired,
+  onSetProgress: PropTypes.func.isRequired,
 };
