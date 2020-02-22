@@ -1,6 +1,6 @@
 import React from "react";
 import renderer from "react-test-renderer";
-import App from "./app.jsx";
+import {App} from "./app.jsx";
 
 
 const questions = [
@@ -41,7 +41,13 @@ const questions = [
 
 it(`Render App`, () => {
   const tree = renderer
-    .create(<App errorsCount={3} questions={questions}/>).toJSON();
+    .create(<App
+      errorsCount={3}
+      questions={questions}
+      onWelcomeButtonClick={()=>{}}
+      onUserAnswer={()=>{}}
+      step={-1}
+    />).toJSON();
 
   expect(tree).toMatchSnapshot();
 });

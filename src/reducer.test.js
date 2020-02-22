@@ -1,4 +1,4 @@
-import {reducer, ActionType} from "./reducer";
+import {reducer, ActionType, ActionCreator} from "./reducer";
 
 describe(`Test main reducer`, () => {
 
@@ -14,5 +14,9 @@ describe(`Test main reducer`, () => {
 
   it(`Increment step`, () => {
     expect(reducer(state, {type: ActionType.INCREMENT_STEP})).toEqual({step: 0, mistakes: 0});
+  });
+
+  it(`ActionCreator works`, () => {
+    expect(reducer(state, ActionCreator.incrementStep())).toEqual({step: 0, mistakes: 0});
   });
 });
