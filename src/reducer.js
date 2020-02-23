@@ -1,11 +1,11 @@
-import {GameType} from "./const";
+import {GameType, DefaultGameParams} from "./const";
 import questions from "./mocks/questions";
 
 const initialState = {
   mistakes: 0,
-  maxMistakes: 3,
+  maxMistakes: DefaultGameParams.maxMistakes,
   questions,
-  step: -1
+  step: DefaultGameParams.step
 };
 
 const ActionType = {
@@ -29,16 +29,9 @@ const ActionCreator = {
     payload: 1
   }),
   incrementMistake: (question, userAnswer) => {
-    let answerIsCorrect = false;
-
-    switch (question.type) {
-      case GameType.ARTIST:
-        answerIsCorrect = isArtistAnswerCorrect(question, userAnswer);
-        break;
-      case GameType.GENRE:
-        answerIsCorrect = isGenreAnswerCorrect(question, userAnswer);
-        break;
-    }
+    const answerIsCorrect = question.type === GameType.ARTIST
+      ? isArtistAnswerCorrect(question, userAnswer)
+      : isGenreAnswerCorrect(question, userAnswer);
 
     return {
       type: ActionType.INCREMENT_MISTAKES,
@@ -50,22 +43,18 @@ const ActionCreator = {
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case ActionType.INCREMENT_STEP:
-      let nextStep = state.step + action.payload;
+      const nextStep = state.step + action.payload;
 
-      if (nextStep >= state.questions.length) {
-        return Object.assign({}, initialState);
-      }
-
-      return Object.assign({}, state, {step: nextStep});
+      return nextStep >= state.questions.length
+        ? Object.assign({}, initialState)
+        : Object.assign({}, state, {step: nextStep});
 
     case ActionType.INCREMENT_MISTAKES:
       const mistakes = state.mistakes + action.payload;
 
-      if (mistakes >= state.maxMistakes) {
-        return Object.assign({}, initialState);
-      }
-
-      return Object.assign({}, state, {mistakes});
+      return mistakes >= state.maxMistakes
+        ? Object.assign({}, initialState)
+        : Object.assign({}, state, {mistakes});
   }
 
   return state;
