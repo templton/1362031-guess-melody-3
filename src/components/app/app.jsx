@@ -17,6 +17,17 @@ class App extends PureComponent {
 
   constructor(props) {
     super(props);
+
+    this.handleUserAnswer = this.handleUserAnswer.bind(this);
+  }
+
+  handleUserAnswer(question, answer) {
+    const {
+      onIncrementStep,
+      onIncrementMistake
+    } = this.props;
+    onIncrementStep();
+    onIncrementMistake(question, answer);
   }
 
   _renderGameScreen() {
@@ -24,15 +35,14 @@ class App extends PureComponent {
       maxMistakes,
       questions,
       step,
-      onUserAnswer,
-      onWelcomeButtonClick
+      onIncrementStep
     } = this.props;
 
     const question = questions[step];
 
     if (step === -1 || step >= questions.length) {
       return (
-        <WelcomeScreen onWelcomeButtonClick={onWelcomeButtonClick} errorsCount={maxMistakes}/>
+        <WelcomeScreen onWelcomeButtonClick={onIncrementStep} errorsCount={maxMistakes}/>
       );
     }
 
@@ -44,7 +54,7 @@ class App extends PureComponent {
       <GameScreen type={question.type}>
         <PageGame
           question={question}
-          onAnswer={onUserAnswer}
+          onAnswer={this.handleUserAnswer}
         />
       </GameScreen>
     );
@@ -75,25 +85,23 @@ App.propTypes = {
   maxMistakes: PropTypes.number.isRequired,
   step: PropTypes.number.isRequired,
   questions: PropTypes.array.isRequired,
-  onWelcomeButtonClick: PropTypes.func.isRequired,
-  onUserAnswer: PropTypes.func.isRequired,
+  onIncrementStep: PropTypes.func.isRequired,
+  onIncrementMistake: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state) => ({
-  step: state.step,
-  maxMistakes: state.maxMistakes,
-  questions: state.questions,
+const mapStateToProps = ({step, maxMistakes, questions}) => ({
+  step,
+  maxMistakes,
+  questions,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  onWelcomeButtonClick() {
-    dispatch(ActionCreator.incrementStep());
-  },
-  onUserAnswer(question, answer) {
-    dispatch(ActionCreator.incrementMistake(question, answer));
-    dispatch(ActionCreator.incrementStep());
-  }
-});
+const {incrementStep, incrementMistake} = ActionCreator;
+
+
+const mapDispatchToProps = {
+  onIncrementStep: incrementStep,
+  onIncrementMistake: incrementMistake,
+};
 
 export {App};
 export default connect(mapStateToProps, mapDispatchToProps)(App);
