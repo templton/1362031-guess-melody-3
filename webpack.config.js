@@ -13,6 +13,9 @@ module.exports = {
     port: 1337,
     historyApiFallback: true
   },
+  resolve: {
+    extensions: [`.js`, `.jsx`]
+  },
   module: {
     rules: [
       {
