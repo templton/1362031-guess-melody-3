@@ -54,7 +54,8 @@ it(`Render App`, () => {
           <App
             maxMistakes={3}
             questions={questions}
-            onWelcomeButtonClick={()=>{}}
+            onIncrementStep={()=>{}}
+            onIncrementMistake={()=>{}}
             onUserAnswer={()=>{}}
             step={-1}
           />

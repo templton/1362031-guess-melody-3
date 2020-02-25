@@ -1,6 +1,23 @@
-import {ActionCreator, ActionType} from "./reducer.js";
+import {ActionCreator, ActionType, reducer} from "./reducer.js";
 
-describe(`Reducer test`, () => {
+
+const questions = [{}];
+
+describe(`reducer test`, () => {
+  it(`reducer incrementStep test`, ()=>{
+    expect(reducer({
+      step: -1,
+      mistakes: 0,
+      questions,
+    }, ActionCreator.incrementStep())).toEqual({
+      step: 0,
+      mistakes: 0,
+      questions,
+    });
+  });
+});
+
+describe(`Action creator test`, () => {
   it(`Action creator for incrementing step returns correct action`, () => {
     expect(ActionCreator.incrementStep()).toEqual({
       type: ActionType.INCREMENT_STEP,
