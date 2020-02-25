@@ -4,6 +4,6 @@ export const GameType = {
 };
 
 export const DefaultGameParams = {
-  maxMistakes: 3,
-  step: -1
+  MAX_MISTAKES: 3,
+  STEP: -1
 };

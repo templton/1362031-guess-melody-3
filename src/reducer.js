@@ -3,9 +3,9 @@ import questions from "./mocks/questions";
 
 const initialState = {
   mistakes: 0,
-  maxMistakes: DefaultGameParams.maxMistakes,
+  maxMistakes: DefaultGameParams.MAX_MISTAKES,
   questions,
-  step: DefaultGameParams.step
+  step: DefaultGameParams.STEP
 };
 
 const ActionType = {
