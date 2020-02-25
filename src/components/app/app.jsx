@@ -7,11 +7,12 @@ import GameScreen from "../game-screen/game-screen.jsx";
 import ArtistQuestion from "../artist-question/artist-question.jsx";
 import GenreQuestion from "../genre-question/genre-question.jsx";
 import {GameType} from "../../const";
-import withAudioPlayer from "../../hocs/with-audio-player/with-audio-player.js";
+import withActivePlayer from "../../hocs/with-active-player/with-active-player.js";
+import withUserAnswer from "../../hocs/with-user-answer/with-user-answer.js";
 import {incrementStep, incrementMistake} from "../../actions";
 
-const GenreQuestionWrapped = withAudioPlayer(GenreQuestion);
-const ArtistQuestionWrapped = withAudioPlayer(ArtistQuestion);
+const GenreQuestionWrapped = withActivePlayer(withUserAnswer(GenreQuestion));
+const ArtistQuestionWrapped = withActivePlayer(ArtistQuestion);
 
 class App extends PureComponent {
 
