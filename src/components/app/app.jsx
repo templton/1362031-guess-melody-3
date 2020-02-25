@@ -8,7 +8,7 @@ import ArtistQuestion from "../artist-question/artist-question.jsx";
 import GenreQuestion from "../genre-question/genre-question.jsx";
 import {GameType} from "../../const";
 import withAudioPlayer from "../../hocs/with-audio-player/with-audio-player.js";
-import {ActionCreator} from "../../reducer";
+import {incrementStep, incrementMistake} from "../../actions";
 
 const GenreQuestionWrapped = withAudioPlayer(GenreQuestion);
 const ArtistQuestionWrapped = withAudioPlayer(ArtistQuestion);
@@ -94,9 +94,6 @@ const mapStateToProps = ({step, maxMistakes, questions}) => ({
   maxMistakes,
   questions,
 });
-
-const {incrementStep, incrementMistake} = ActionCreator;
-
 
 const mapDispatchToProps = {
   onIncrementStep: incrementStep,
