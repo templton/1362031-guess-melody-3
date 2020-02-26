@@ -2,7 +2,8 @@ import {GameType} from "./const";
 
 const ActionType = {
   INCREMENT_MISTAKES: `INCREMENT_MISTAKES`,
-  INCREMENT_STEP: `INCREMENT_STEP`
+  INCREMENT_STEP: `INCREMENT_STEP`,
+  RESET: `RESET`,
 };
 
 const isArtistAnswerCorrect = (question, userAnswer) => {
@@ -31,5 +32,11 @@ const incrementMistake = (question, userAnswer) => {
   };
 }
 
+const resetGame = () => {
+  return {
+    type: ActionType.RESET,
+    payload: null,
+  };
+};
 
-export {ActionType, incrementStep, incrementMistake};
+export {ActionType, incrementStep, incrementMistake, resetGame};

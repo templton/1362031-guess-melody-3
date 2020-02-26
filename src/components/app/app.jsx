@@ -9,7 +9,9 @@ import GenreQuestion from "../genre-question/genre-question.jsx";
 import {GameType} from "../../const";
 import withActivePlayer from "../../hocs/with-active-player/with-active-player.js";
 import withUserAnswer from "../../hocs/with-user-answer/with-user-answer.js";
-import {incrementStep, incrementMistake} from "../../actions";
+import {incrementStep, incrementMistake, resetGame} from "../../actions";
+import GameOverScreen from "../game-over-screen/game-over-screen.jsx";
+import WinScreen from "../win-screen/win-screen.jsx";
 
 const GenreQuestionWrapped = withActivePlayer(withUserAnswer(GenreQuestion));
 const ArtistQuestionWrapped = withActivePlayer(ArtistQuestion);
@@ -34,16 +36,36 @@ class App extends PureComponent {
   _renderGameScreen() {
     const {
       maxMistakes,
+      mistakes,
       questions,
       step,
+      onResetGame,
       onIncrementStep
     } = this.props;
 
     const question = questions[step];
 
-    if (step === -1 || step >= questions.length) {
+    if (step === -1) {
       return (
         <WelcomeScreen onWelcomeButtonClick={onIncrementStep} errorsCount={maxMistakes}/>
+      );
+    }
+
+    if (mistakes >= maxMistakes) {
+      return (
+        <GameOverScreen
+          onReplayButtonClick={onResetGame}
+        />
+      );
+    }
+
+    if (step >= questions.length) {
+      return (
+        <WinScreen
+          questionsCount={questions.length}
+          mistakesCount={mistakes}
+          onReplayButtonClick={onResetGame}
+        />
       );
     }
 
@@ -88,17 +110,22 @@ App.propTypes = {
   questions: PropTypes.array.isRequired,
   onIncrementStep: PropTypes.func.isRequired,
   onIncrementMistake: PropTypes.func.isRequired,
+  onResetGame: PropTypes.func.isRequired,
+  mistakes: PropTypes.number.isRequired,
 };
 
-const mapStateToProps = ({step, maxMistakes, questions}) => ({
+const mapStateToProps = ({step, maxMistakes, questions, mistakes, resetGame}) => ({
   step,
   maxMistakes,
   questions,
+  mistakes,
+  resetGame
 });
 
 const mapDispatchToProps = {
   onIncrementStep: incrementStep,
   onIncrementMistake: incrementMistake,
+  onResetGame: resetGame
 };
 
 export {App};

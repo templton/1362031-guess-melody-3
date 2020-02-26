@@ -12,18 +12,19 @@ const initialState = {
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case ActionType.INCREMENT_STEP:
-      const nextStep = state.step + action.payload;
-
-      return nextStep >= state.questions.length
-        ? Object.assign({}, initialState)
-        : Object.assign({}, state, {step: nextStep});
+      return Object.assign({}, state, {
+        step: state.step + action.payload,
+      });
 
     case ActionType.INCREMENT_MISTAKES:
-      const mistakes = state.mistakes + action.payload;
+      return Object.assign({}, state, {
+        mistakes: state.mistakes + action.payload,
+      });
 
-      return mistakes >= state.maxMistakes
-        ? Object.assign({}, initialState)
-        : Object.assign({}, state, {mistakes});
+    case ActionType.RESET:
+      return Object.assign({}, initialState, {
+        step: 0,
+      });
   }
 
   return state;
