@@ -34,8 +34,7 @@ const incrementMistake = (question, userAnswer) => {
 
 const resetGame = () => {
   return {
-    type: ActionType.RESET,
-    payload: null,
+    type: ActionType.RESET
   };
 };
 

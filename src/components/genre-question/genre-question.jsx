@@ -17,15 +17,17 @@ class GenreQuestion extends PureComponent {
       genre,
     } = question;
 
+    const onSubmit = (evt) => {
+      evt.preventDefault();
+      onAnswer();
+    }
+
     return (
       <section className="game__screen">
         <h2 className="game__title">Выберите {genre} треки</h2>
         <form
           className="game__tracks"
-          onSubmit={(evt) => {
-            evt.preventDefault();
-            onAnswer();
-          }}
+          onSubmit={onSubmit}
         >
           {answers.map((answer, i) => (
             <GenreQuestionItem
