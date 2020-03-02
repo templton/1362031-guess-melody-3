@@ -1,15 +1,32 @@
-import {ActionCreator, ActionType} from "./reducer.js";
+import {reducer} from "./reducer.js";
+import {incrementStep, incrementMistake, ActionType} from "../../actions";
 
-describe(`Reducer test`, () => {
+const questions = [{}];
+
+describe(`reducer test`, () => {
+  it(`reducer incrementStep test`, ()=>{
+    expect(reducer({
+      step: -1,
+      mistakes: 0,
+      questions,
+    }, incrementStep())).toEqual({
+      step: 0,
+      mistakes: 0,
+      questions,
+    });
+  });
+});
+
+describe(`Action creator test`, () => {
   it(`Action creator for incrementing step returns correct action`, () => {
-    expect(ActionCreator.incrementStep()).toEqual({
+    expect(incrementStep()).toEqual({
       type: ActionType.INCREMENT_STEP,
       payload: 1,
     });
   });
 
   it(`Action creator for incrementing mistake returns action with 0 payload if answer for artist is correct`, () => {
-    expect(ActionCreator.incrementMistake({
+    expect(incrementMistake({
       type: `artist`,
       song: {
         artist: `correct`,
@@ -37,7 +54,7 @@ describe(`Reducer test`, () => {
   });
 
   it(`Action creator for incrementing mistake returns action with 1 payload if answer for artist is incorrect`, () => {
-    expect(ActionCreator.incrementMistake({
+    expect(incrementMistake({
       type: `artist`,
       song: {
         artist: `correct`,
@@ -65,7 +82,7 @@ describe(`Reducer test`, () => {
   });
 
   it(`Action creator for incrementing mistake returns action with 0 payload if answer for genre is correct`, () => {
-    expect(ActionCreator.incrementMistake({
+    expect(incrementMistake({
       type: `genre`,
       genre: `jazz`,
       answers: [
@@ -90,7 +107,7 @@ describe(`Reducer test`, () => {
   });
 
   it(`Action creator for incrementing mistake returns action with 1 payload if answer for genre is incorrect`, () => {
-    expect(ActionCreator.incrementMistake({
+    expect(incrementMistake({
       type: `genre`,
       genre: `jazz`,
       answers: [

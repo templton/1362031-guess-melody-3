@@ -7,11 +7,14 @@ import GameScreen from "../game-screen/game-screen.jsx";
 import ArtistQuestion from "../artist-question/artist-question.jsx";
 import GenreQuestion from "../genre-question/genre-question.jsx";
 import {GameType} from "../../const";
-import withAudioPlayer from "../../hocs/with-audio-player/with-audio-player.js";
-import {ActionCreator} from "../../reducer";
+import withActivePlayer from "../../hocs/with-active-player/with-active-player.js";
+import withUserAnswer from "../../hocs/with-user-answer/with-user-answer.js";
+import {incrementStep, incrementMistake, resetGame} from "../../actions";
+import GameOverScreen from "../game-over-screen/game-over-screen.jsx";
+import WinScreen from "../win-screen/win-screen.jsx";
 
-const GenreQuestionWrapped = withAudioPlayer(GenreQuestion);
-const ArtistQuestionWrapped = withAudioPlayer(ArtistQuestion);
+const GenreQuestionWrapped = withActivePlayer(withUserAnswer(GenreQuestion));
+const ArtistQuestionWrapped = withActivePlayer(ArtistQuestion);
 
 class App extends PureComponent {
 
@@ -33,16 +36,36 @@ class App extends PureComponent {
   _renderGameScreen() {
     const {
       maxMistakes,
+      mistakes,
       questions,
       step,
+      onResetGame,
       onIncrementStep
     } = this.props;
 
     const question = questions[step];
 
-    if (step === -1 || step >= questions.length) {
+    if (step === -1) {
       return (
         <WelcomeScreen onWelcomeButtonClick={onIncrementStep} errorsCount={maxMistakes}/>
+      );
+    }
+
+    if (mistakes >= maxMistakes) {
+      return (
+        <GameOverScreen
+          onReplayButtonClick={onResetGame}
+        />
+      );
+    }
+
+    if (step >= questions.length) {
+      return (
+        <WinScreen
+          questionsCount={questions.length}
+          mistakesCount={mistakes}
+          onReplayButtonClick={onResetGame}
+        />
       );
     }
 
@@ -87,20 +110,22 @@ App.propTypes = {
   questions: PropTypes.array.isRequired,
   onIncrementStep: PropTypes.func.isRequired,
   onIncrementMistake: PropTypes.func.isRequired,
+  onResetGame: PropTypes.func.isRequired,
+  mistakes: PropTypes.number.isRequired,
 };
 
-const mapStateToProps = ({step, maxMistakes, questions}) => ({
+const mapStateToProps = ({step, maxMistakes, questions, mistakes, resetGame}) => ({
   step,
   maxMistakes,
   questions,
+  mistakes,
+  resetGame
 });
-
-const {incrementStep, incrementMistake} = ActionCreator;
-
 
 const mapDispatchToProps = {
   onIncrementStep: incrementStep,
   onIncrementMistake: incrementMistake,
+  onResetGame: resetGame
 };
 
 export {App};
