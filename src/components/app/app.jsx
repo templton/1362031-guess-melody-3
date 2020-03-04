@@ -12,6 +12,13 @@ import withUserAnswer from "../../hocs/with-user-answer/with-user-answer.js";
 import {incrementStep, incrementMistake, resetGame} from "../../actions";
 import GameOverScreen from "../game-over-screen/game-over-screen.jsx";
 import WinScreen from "../win-screen/win-screen.jsx";
+import {ActionCreator} from "../../reducer/game/game.js";
+import {AuthorizationStatus} from "../../reducer/user/user.js";
+import {getStep, getMistakes, getMaxMistakes} from "../../reducer/game/selectors.js";
+import {getQuestions} from "../../reducer/data/selectors.js";
+import {getAuthorizationStatus} from "../../reducer/user/selectors.js";
+import {Operation as UserOperation} from "../../reducer/user/user.js";
+import AuthScreen from "../auth-screen/auth-screen.jsx";
 
 const GenreQuestionWrapped = withActivePlayer(withUserAnswer(GenreQuestion));
 const ArtistQuestionWrapped = withActivePlayer(ArtistQuestion);
@@ -35,6 +42,8 @@ class App extends PureComponent {
 
   _renderGameScreen() {
     const {
+      authorizationStatus,
+      login,
       maxMistakes,
       mistakes,
       questions,
@@ -60,13 +69,25 @@ class App extends PureComponent {
     }
 
     if (step >= questions.length) {
-      return (
-        <WinScreen
-          questionsCount={questions.length}
-          mistakesCount={mistakes}
-          onReplayButtonClick={onResetGame}
-        />
-      );
+      if (authorizationStatus === AuthorizationStatus.AUTH) {
+        return (
+          <WinScreen
+            questionsCount={questions.length}
+            mistakesCount={mistakes}
+            onReplayButtonClick={resetGame}
+          />
+        );
+      } else if (authorizationStatus === AuthorizationStatus.NO_AUTH) {
+        return (
+          <AuthScreen
+            onReplayButtonClick={resetGame}
+            onSubmit={login}
+          />
+        );
+      }
+
+      return null;
+
     }
 
     // console.log('question, step='+step,question);
@@ -98,6 +119,12 @@ class App extends PureComponent {
           <Route axact path="/dev-genre">
             <GenreQuestionWrapped onAnswer={()=>{}} question={questions[0]}/>
           </Route>
+          <Route exact path="/dev-auth">
+            <AuthScreen
+              onReplayButtonClick={() => {}}
+              onSubmit={() => {}}
+            />
+          </Route>
         </Switch>
       </BrowserRouter>
     );
@@ -105,6 +132,8 @@ class App extends PureComponent {
 }
 
 App.propTypes = {
+  authorizationStatus: PropTypes.string.isRequired,
+  login: PropTypes.func.isRequired,
   maxMistakes: PropTypes.number.isRequired,
   step: PropTypes.number.isRequired,
   questions: PropTypes.array.isRequired,
@@ -114,19 +143,21 @@ App.propTypes = {
   mistakes: PropTypes.number.isRequired,
 };
 
-const mapStateToProps = ({step, maxMistakes, questions, mistakes, resetGame}) => ({
-  step,
-  maxMistakes,
-  questions,
-  mistakes,
-  resetGame
+const mapStateToProps = (state) => ({
+  authorizationStatus: getAuthorizationStatus(state),
+  step: getStep(state),
+  maxMistakes: getMaxMistakes(state),
+  questions: getQuestions(state),
+  mistakes: getMistakes(state),
 });
 
 const mapDispatchToProps = {
+  login: UserOperation.login,
   onIncrementStep: incrementStep,
   onIncrementMistake: incrementMistake,
   onResetGame: resetGame
 };
+
 
 export {App};
 export default connect(mapStateToProps, mapDispatchToProps)(App);
